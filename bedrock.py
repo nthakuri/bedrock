@@ -19,7 +19,7 @@ load_dotenv()
 from pyathena import connect
 from CustomSQLDatabaseChain import SQLDatabaseChain_Custom
 
-from common_functions import create_aws_session, create_llm_anthropic
+from common_functions import create_llm_anthropic
 
 database_name = "ca_data"
 s3_staging_dir = 's3://our-bedrock-multidata/multi_stage'
