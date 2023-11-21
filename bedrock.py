@@ -97,9 +97,8 @@ def run_query(query):
         input_variables=["input", "table_info", "dialect"], template=formatted_prompt
     )
 
-    Session = create_aws_session()
     db = create_db_connection(database_name, s3_staging_dir)
-    llm = create_llm_anthropic(Session)
+    llm = create_llm_anthropic()
 
     db_chain = SQLDatabaseChain_Custom.from_llm(llm, db, prompt=PROMPT_sql, verbose=True, return_intermediate_steps=False, top_k=1000, use_query_checker=False, return_direct=False)
     response = db_chain.run(query)

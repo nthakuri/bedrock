@@ -17,18 +17,22 @@ S3_STAGING_DIR = os.environ.get("S3_STAGING_DIR").strip('"')
 S3_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME").strip('"')
 AWS_REGION = os.environ.get("AWS_REGION").strip('"')
 
-def create_aws_session():
-    Session = boto3.Session(
-        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID").strip('"'),
-        aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY").strip('"'),
-        aws_session_token=os.environ.get("AWS_SESSION_TOKEN").strip('"'),
-        region_name=os.environ.get("REGION_NAME").strip('"')
-    )
-    return Session
+# def create_aws_session():
+#     Session = boto3.Session(
+#         aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID").strip('"'),
+#         aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY").strip('"'),
+#         aws_session_token=os.environ.get("AWS_SESSION_TOKEN").strip('"'),
+#         region_name=os.environ.get("REGION_NAME").strip('"')
+#     )
+#     return Session
 
-def create_llm_anthropic(Session):
-    bedrock = Session.client(
+
+
+def create_llm_anthropic():
+    bedrock = boto3.client(
         service_name='bedrock',
+        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID").strip('"'), 
+        aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY").strip('"'), 
         region_name='us-east-1',
         endpoint_url='https://bedrock.us-east-1.amazonaws.com'
     )
@@ -36,13 +40,19 @@ def create_llm_anthropic(Session):
     return llm
 
 def create_athena_client():
-    return create_aws_session().client(service_name='athena')
+    return  boto3.client('athena', 
+                      aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID").strip('"'), 
+                      aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY").strip('"'), 
+                      region_name=os.environ.get("REGION_NAME").strip('"')
+                      )
 
 
 def create_s3_client():
-    return create_aws_session().client(service_name='s3')
-
-Session = create_aws_session()
+    return  boto3.client('s3', 
+                      aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID").strip('"'), 
+                      aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY").strip('"'), 
+                      region_name=os.environ.get("REGION_NAME").strip('"')
+                      )
 
 
 def load_query_results(
