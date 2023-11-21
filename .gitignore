@@ -1,0 +1,6 @@
+.env
+.myenv/
+myenv/
+myenv
+sshkey
+sshkey.pub

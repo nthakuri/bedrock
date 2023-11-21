@@ -1,0 +1,15 @@
+anthropic==0.3.11
+ipykernel==6.25.2
+langchain==0.0.190
+pip==23.1.2
+pipdeptree==2.13.0
+pyathena==2.25.2
+redshift-connector==2.0.910
+snowflake-sqlalchemy==1.5.0
+sqlalchemy-aurora-data-api==0.4.1
+sqlalchemy-redshift==0.8.14
+python-dotenv
+./bedrock-python-sdk/boto3-1.28.21-py3-none-any.whl
+./bedrock-python-sdk/botocore-1.31.21-py3-none-any.whl
+pandas
+streamlit
