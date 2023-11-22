@@ -56,21 +56,22 @@ def create_s3_client():
 
 
 
-def load_query_results(
-    client: boto3.client, query_response: Dict
-) -> pd.DataFrame:
+def load_query_results(client: boto3.client, query_response: Dict):
     while True:
-        try:
+            query_exe_id = query_response['QueryExecutionId']
+
             # This function only loads the first 1000 rows
-            client.get_query_results(
-                QueryExecutionId=query_response["QueryExecutionId"]
-            )
-            break
-        except Exception as err:
-            if "not yet finished" in str(err):
-                time.sleep(0.001)
-            else:
-                raise err
+            query_status = client.get_query_execution(QueryExecutionId = query_exe_id)['QueryExecution']['Status']['State']
+            if query_status in ['SUCCEEDED', 'FAILED', 'CANCELLED']:
+                if query_status == 'SUCCEEDED':
+                    client.get_query_results(
+                        QueryExecutionId=query_response["QueryExecutionId"]
+                    )
+                    break
+
+                if query_status == 'FAILED':
+                    return ('Error running the query', False)
+     
     s3_client = create_s3_client()
     S3_OUTPUT_DIRECTORY = os.environ.get("S3_OUTPUT_DIRECTORY").strip('"')
 
@@ -80,5 +81,5 @@ def load_query_results(
     data = s3_object['Body'].read().decode('utf-8')
     df = pd.read_csv(StringIO(data))
     df.index = [''] * len(df)
-    return df
+    return (df, True)
 

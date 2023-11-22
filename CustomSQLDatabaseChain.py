@@ -123,10 +123,14 @@ class SQLDatabaseChain_Custom(Chain):
                     result = "Could not run Query"
                 else:    
                     result = common_functions.load_query_results(athena_client, response)
-                returned_data = len(result)
 
-                intermediate_steps_to_display.append(f'Result:\n{result}')
-                
+                if result[1] == True:
+                    returned_data = len(result[0])
+                    intermediate_steps_to_display.append(f"The query returned {returned_data} rows")
+                    intermediate_steps_to_display.append(f'Result:\n{result[0]}')
+                else:
+                    self.return_direct = True
+                    
             if self.return_direct:
                 final_result = result
             else:
