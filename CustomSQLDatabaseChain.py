@@ -130,9 +130,9 @@ class SQLDatabaseChain_Custom(Chain):
                     intermediate_steps_to_display.append(f'Result:\n{result[0]}')
                 else:
                     self.return_direct = True
-                    
+
             if self.return_direct:
-                final_result = result
+                final_result = result[0]
             else:
                 input_text += f"""\nYou are the helpful Assistant which replies to above question taking references through\n{sql_cmd}\n
                 SQLResult: {result}\n
@@ -176,9 +176,6 @@ class SQLDatabaseChain_Custom(Chain):
 
 
 
-            intermediate_steps_to_display.append(f"The query returned {returned_data} rows")
-
-            intermediate_steps_to_display.append(f'final result : {final_result}')
 
             chain_result: Dict[str, Any] = {self.output_key: str(intermediate_steps_to_display)}
 
