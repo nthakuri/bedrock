@@ -108,8 +108,6 @@ class SQLDatabaseChain_Custom(Chain):
 
             if not self.use_query_checker:
                 intermediate_steps_to_display.append(f'SQL :{sql_cmd}')
-
-
                 try:
                     response = athena_client.start_query_execution(
                         QueryString=sql_cmd,
@@ -128,7 +126,7 @@ class SQLDatabaseChain_Custom(Chain):
                     returned_data = len(result[0])
                     intermediate_steps_to_display.append(f"The query returned {returned_data} rows")
                     intermediate_steps_to_display.append(f'Result:\n{result[0]}')
-                else:
+                if result[1] == False:
                     self.return_direct = True
 
             if self.return_direct:
@@ -165,6 +163,8 @@ class SQLDatabaseChain_Custom(Chain):
                         # callbacks=_run_manager.get_child(),
                         **llm_inputs,
                     ).strip()
+
+
                 except Exception as e:
                     if "ValidationException" in str(e):
                         # Handle the ValidationException by performing another prompt
@@ -175,6 +175,7 @@ class SQLDatabaseChain_Custom(Chain):
 
 
 
+                intermediate_steps_to_display.append(f'Final Result:\n{final_result}')
 
 
             chain_result: Dict[str, Any] = {self.output_key: str(intermediate_steps_to_display)}
