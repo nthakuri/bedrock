@@ -55,6 +55,7 @@ def create_s3_client():
                       )
 
 
+
 def load_query_results(
     client: boto3.client, query_response: Dict
 ) -> pd.DataFrame:
